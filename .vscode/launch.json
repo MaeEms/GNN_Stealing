@@ -1,0 +1,43 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: attack.py --dataset citeseer_full --target-model gat --target-model-dim 128 --num-hidden 128",
+            "type": "python",
+            "request": "launch",
+            "program": "attack.py",
+            "env": {},
+            "console": "integratedTerminal",
+            "args": [
+                "--dataset",
+                "citeseer_full",
+                "--target-model",
+                "gat",
+                "--target-model-dim",
+                "128",
+                "--num-hidden",
+                "128"
+            ],
+            "cwd": "/home/yangchenxi/GNNStealing/code"
+        }
+        {
+            "name": "Python: train_target_model.py --dataset citeseer_full --target-model gin --num-hidden 128 --structure original",
+            "type": "python",
+            "request": "launch",
+            "program": "train_target_model.py",
+            "env": {},
+            "console": "integratedTerminal",
+            "args": [
+                "--dataset",
+                "citeseer_full",
+                "--target-model",
+                "gin",
+                "--num-hidden",
+                "128",
+                "--structure",
+                "original"
+            ],
+            "cwd": "/home/yangchenxi/GNNStealing/code"
+        }
+    ]
+}
