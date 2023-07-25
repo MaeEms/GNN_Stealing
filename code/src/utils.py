@@ -380,6 +380,7 @@ def delete_dgl_graph_edge(train_g):
     dgl_g = dgl.add_self_loop(dgl_g)
     dgl_g.ndata['features'] = train_g.ndata['features']
     dgl_g.ndata['labels'] = train_g.ndata['labels']
+    dgl_g.ndata['_ID'] = train_g.ndata['_ID']
     return dgl_g
 
 

@@ -163,6 +163,7 @@ def get_query_graph(train_g):
         G_QUERY = dgl.from_scipy(sparse_adj)
         G_QUERY.ndata['features'] = train_g.ndata['features']
         G_QUERY.ndata['labels'] = train_g.ndata['labels']
+        G_QUERY.ndata['_ID'] = train_g.ndata['_ID']
         G_QUERY = dgl.add_self_loop(G_QUERY)
     else:
         print("wrong structure param... stop!")
@@ -420,7 +421,7 @@ def evaluate_target_model_service(test_g):
     pred_tensor = torch.stack(pred_list)
     
     return right_number/len(t), emb_tensor, pred_tensor  
-
+ 
 
 @celery.task(bind=True, name='attack_service')
 def attack_task(self, params):

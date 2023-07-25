@@ -146,6 +146,7 @@ def draw_sub_graph(node_idx, sub_graph):
     plt.savefig("images/"+"node_"+node_idx+"_adjacency.SVG")   # svg格式
 
 
+# 设置目标模型参数
 target_model, model_args, g, n_class = init_service(dataset="citeseer_full", target_model_name="gat",
                                                     target_model_dim=256)
 target_model = target_model.to(device)
