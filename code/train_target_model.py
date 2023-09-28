@@ -72,6 +72,8 @@ labels = g.ndata['labels']
 train_g, val_g, test_g = split_graph(g, frac_list=[0.6, 0.2, 0.2])
 print(train_g.number_of_nodes(), val_g.number_of_nodes(), test_g.number_of_nodes())
 
+# exit()
+
 train_g.create_formats_()
 val_g.create_formats_()
 test_g.create_formats_()

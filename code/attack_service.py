@@ -1,5 +1,6 @@
 import time
 from dgl import load_graphs
+from dgl.sampling import select_topk
 from src.gin import *
 from src.gat import *
 from src.sage import *
@@ -8,6 +9,7 @@ from src.ginsurrogate import *
 from src.gatsurrogate import *
 from src.utils import *
 from src.constants import *
+from networkx.algorithms.centrality import degree_centrality
 from scipy import sparse
 import os
 import pickle
@@ -21,6 +23,13 @@ from flask import Flask, url_for, jsonify, request
 from flask import Flask
 from flask_cors import CORS
 import requests
+from pprint import pprint
+from collections import defaultdict
+
+import networkx as nx
+from node2vec import Node2Vec
+from sklearn.cluster import KMeans
+import numpy as np
 
 attack_service = Flask(__name__)
 
@@ -50,14 +59,14 @@ argparser = argparse.ArgumentParser("multi-gpu training")
 argparser.add_argument('--gpu', type=int, default=-1,
                        help="GPU device ID. Use -1 for CPU training")
 argparser.add_argument('--dataset', type=str, default='citeseer_full')
-argparser.add_argument('--num-epochs', type=int, default=200)
+argparser.add_argument('--num-epochs', type=int, default=300)
 argparser.add_argument('--transform', type=str, default='TSNE')
 argparser.add_argument('--num-layers', type=int, default=2)
 argparser.add_argument('--fan-out', type=str, default='10,50')
 argparser.add_argument('--batch-size', type=int, default=1000)
 argparser.add_argument('--log-every', type=int, default=20)
 argparser.add_argument('--eval-every', type=int, default=50)
-argparser.add_argument('--lr', type=float, default=0.001)
+argparser.add_argument('--lr', type=float, default=0.006)
 argparser.add_argument('--dropout', type=float, default=0.5)
 argparser.add_argument('--num-workers', type=int, default=4,
                        help="Number of sampling processes. Use 0 for no extra process.")
@@ -139,36 +148,6 @@ def apply_model_args(g, n_classes, model_args):
             args.target_model_dim) + '/' + './target_model_' + args.target_model + '_' + args.dataset,
                                   map_location=torch.device('cpu'))
     return target_model
-
-
-def get_query_graph(train_g):
-    if args.structure == 'original':
-        G_QUERY = train_g
-        # only use node to query
-        if args.delete_edges == "yes":
-            G_QUERY = delete_dgl_graph_edge(train_g)
-    elif args.structure == 'idgl':
-        config['dgl_graph'] = train_g
-        config['cuda_id'] = args.gpu
-        adj = idgl(config)
-        adj = adj.clone().detach().cpu().numpy()
-        if args.dataset in ['acm', 'amazon_cs']:
-            adj = (adj > 0.9).astype(np.int)
-        elif args.dataset in ['coauthor_phy']:
-            adj = (adj >= 0.999).astype(np.int)
-        else:
-            adj = (adj > 0.999).astype(np.int)
-
-        sparse_adj = sparse_csr_mat = sparse.csr_matrix(adj)
-        G_QUERY = dgl.from_scipy(sparse_adj)
-        G_QUERY.ndata['features'] = train_g.ndata['features']
-        G_QUERY.ndata['labels'] = train_g.ndata['labels']
-        G_QUERY.ndata['_ID'] = train_g.ndata['_ID']
-        G_QUERY = dgl.add_self_loop(G_QUERY)
-    else:
-        print("wrong structure param... stop!")
-        sys.exit()
-    return G_QUERY
 
 
 def preprocess_query_response(train_g, val_g, test_g, query_preds, query_embs, G_QUERY):
@@ -356,6 +335,7 @@ def evaluate_target_model(target_model, test_g, model_args):
 # 远程访问版
 def query_target_model_service(G_QUERY):
     t = G_QUERY.ndata['_ID'].tolist()
+    
     emb_list = []
     pred_list = []
     right_number = 0
@@ -422,6 +402,110 @@ def evaluate_target_model_service(test_g):
     
     return right_number/len(t), emb_tensor, pred_tensor  
  
+ 
+ # 从idgl生成的子图中，获取连接性更高的节点的ID，从train_g中挑出这部分节点重新使用idgl生成子图，以减少查询次数
+def get_sub_idgl_query_graph(G_QUERY, train_g):
+    # 从图中抽取出连接性更好的子图
+        value = []
+        for node_id in G_QUERY.nodes():
+            this_deg = G_QUERY.in_degree(node_id) + G_QUERY.out_degree(node_id)
+            value.append(this_deg)
+            
+        max_indices = []
+        length = int(G_QUERY.number_of_nodes() * 0.5)
+        for i, x in enumerate(value):
+            if len(max_indices) < length:
+                max_indices.append(i)
+            else:
+                min_index = min(max_indices, key=lambda j: value[j])
+                if x > value[min_index]:
+                    max_indices[max_indices.index(min_index)] = i
+        max_indices_np = np.array(max_indices)
+        print("max_indices_np:" + str(max_indices_np))
+        
+        subgraph = train_g.subgraph(max_indices_np)
+        subgraph.ndata["_ID"] = train_g.ndata["_ID"][max_indices_np]
+        subgraph.ndata["features"] = train_g.ndata["features"][max_indices_np]
+        subgraph.ndata["labels"] = train_g.ndata["labels"][max_indices_np]
+        return subgraph
+    
+
+def get_sub_query_graph(origin_graph):
+    # 从图中抽取出连接性更好的子图
+        value = []
+        for node_id in origin_graph.nodes():
+            this_deg = origin_graph.in_degree(node_id) + origin_graph.out_degree(node_id)
+            value.append(this_deg)
+            
+        max_indices = []
+        length = int(origin_graph.number_of_nodes() * 0.2)
+        for i, x in enumerate(value):
+            if len(max_indices) < length:
+                max_indices.append(i)
+            else:
+                min_index = min(max_indices, key=lambda j: value[j])
+                if x > value[min_index]:
+                    max_indices[max_indices.index(min_index)] = i
+        max_indices_np = np.array(max_indices)
+        print("max_indices_np:" + str(max_indices_np))
+        
+        subgraph = origin_graph.subgraph(max_indices_np)
+        subgraph.ndata["_ID"] = origin_graph.ndata["_ID"][max_indices_np]
+        subgraph.ndata["features"] = origin_graph.ndata["features"][max_indices_np]
+        subgraph.ndata["labels"] = origin_graph.ndata["labels"][max_indices_np]
+        print(subgraph.ndata["_ID"])
+        print(subgraph.ndata["labels"])
+        return subgraph
+
+
+def idgl_generate(origin_graph):
+    # 使用IDGL生成子图的离散图
+        config['dgl_graph'] = origin_graph
+        config['cuda_id'] = args.gpu
+        adj = idgl(config)
+        adj = adj.clone().detach().cpu().numpy()
+        if args.dataset in ['acm', 'amazon_cs']:
+            adj = (adj > 0.9).astype(np.int)
+        elif args.dataset in ['coauthor_phy']:
+            adj = (adj >= 0.999).astype(np.int)
+        else:
+            adj = (adj > 0.999).astype(np.int)
+        sparse_adj = sparse_csr_mat = sparse.csr_matrix(adj)
+        idgl_graph = dgl.from_scipy(sparse_adj)
+        
+        # 将子图的节点特征和标签等信息添加到离散图中
+        idgl_graph.ndata['features'] = origin_graph.ndata['features']
+        idgl_graph.ndata['labels'] = origin_graph.ndata['labels']
+        idgl_graph.ndata['_ID'] = origin_graph.ndata['_ID']
+        return idgl_graph
+    
+
+def get_query_graph(train_g):
+    if args.structure == 'original':
+        # G_QUERY = train_g
+        G_QUERY = get_sub_query_graph(train_g)
+        # only use node to query
+        if args.delete_edges == "yes":
+            G_QUERY = delete_dgl_graph_edge(train_g)
+    elif args.structure == 'idgl':
+        # 以下方式二选一，需要注释掉一个
+        
+        # 方式一：直接使用idgl生成子图
+        #idgl_graph = idgl_generate(train_g) # 使用IDGL生成子图的离散图
+        #G_QUERY = dgl.add_self_loop(idgl_graph) # 添加上回路
+        
+        # 方式二：使用idgl生成子图后，从中选取连接性更高的节点，使用IDGL重新生成子图
+        idgl_graph = idgl_generate(train_g)
+        subgraph = get_sub_idgl_query_graph(idgl_graph, train_g)
+        G_QUERY = idgl_generate(subgraph)
+        G_QUERY = dgl.add_self_loop(G_QUERY)
+        
+    else:
+        print("wrong structure param... stop!")
+        sys.exit()
+        
+    return G_QUERY 
+        
 
 @celery.task(bind=True, name='attack_service')
 def attack_task(self, params):
@@ -431,15 +515,16 @@ def attack_task(self, params):
     for k, v in params.items():
       setattr(args, k, v)   
     
-    g, n_classes = load_dataset() # 划分数据集
+    g, n_classes = load_dataset() 
     # args.query_ratio: 1.0 means we use 30% target dataset as the G_QUERY. 0.5 means 15%...
-    train_g, val_g, test_g = split_graph_different_ratio(g, frac_list=[0.3, 0.2, 0.5], ratio=args.query_ratio)   
-    G_QUERY = get_query_graph(train_g) # 构造查询图（train_g, train_g去边, IDGL重构）
+    train_g, val_g, test_g = split_graph_different_ratio(g, frac_list=[0.3, 0.2, 0.5], ratio=args.query_ratio)  # 划分数据集
     
-    print(G_QUERY.ndata['_ID'])
+    G_QUERY = get_query_graph(train_g) # 构造查询图（train_g, train_g去边, IDGL重构）
 
     if args.structure != 'original': # 构造训练图
         print("using idgl reconstructed graph") # 如果图是离散的，那么在训练代理模型之前，先对其进行修复
+        train_g = G_QUERY
+    else:
         train_g = G_QUERY
     
     # 为图创建不同的稀疏矩阵格式
@@ -479,55 +564,11 @@ def attack_task(self, params):
     # save_result(_fidelity, _acc, test_acc)
 
 
-
 @attack_service.route('/execute', methods=['GET'])
 def start_func():
     params = request.get_json()
     task = attack_task.apply_async(kwargs={'params': params}) # 异步调用
     return jsonify({'message': '长任务启动成功.', 'task_id': task.id}), 202
-
-
-@attack_service.route('/tasks', methods=['GET'])
-def list_tasks():
-    i = celery.control.inspect() # 获取所有任务
-    all_tasks = {
-        'active_tasks': i.active(),  # 获取当前正在执行的任务
-        'queued_tasks': i.reserved(),  # 获取当前排队的任务
-        'scheduled_tasks': i.scheduled()  # 获取当前scheduled的任务
-    }
-    return jsonify(all_tasks), 200
-
-"""
-@attack_service.route('/query', methods=['GET'])
-def task_status():
-    task_id = request.args.get('task_id')
-    task = attack_task.AsyncResult(task_id)
-    if task.state == 'PENDING':
-        response = {
-            'state': task.state,
-            'current': 0,
-            'total': 1,
-            'status': '正在等待...'
-        }
-    elif task.state == "GMS001" or "GMS002" or "GMS003" or "GMS004" or "GMS005" or "GMS006" or "GMS007" :
-        response = {
-            'state': task.state,
-            'current': 0,
-            'total': 1,
-            # todo
-            # 'status': task.info.get('status', ''),
-        }
-    else:
-        # 后端执行任务出现了一些问题
-        response = {
-            'state': task.state,
-            'current': 1,
-            'total': 1,
-            'status': str(task.info),  # 报错的具体异常
-        }
-    return jsonify(response)
-"""
-
 
 
 if __name__ == '__main__':

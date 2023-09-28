@@ -126,6 +126,7 @@ def extract_node_subgraph(dataset_name, i, dgl_graph):
         node_sub_graph.ndata['features'] = node_sub_graph.ndata['feat']
     if not 'labels' in node_sub_graph.ndata:
         node_sub_graph.ndata['labels'] = node_sub_graph.ndata['label']
+        
     return node_sub_graph
 
 

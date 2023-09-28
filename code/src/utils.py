@@ -1,4 +1,5 @@
 import dgl
+from scipy import sparse
 
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
@@ -12,11 +13,13 @@ from networkx.generators.community import planted_partition_graph
 from networkx.algorithms.community.asyn_fluid import asyn_fluidc
 
 import numpy as np
+from src.constants import *
 
 import os
 import sys
 import pickle as pkl
 import scipy.sparse as sp
+from core.model_handler import ModelHandler
 
 import networkx as nx
 from graphgallery.datasets import NPZDataset
@@ -60,8 +63,9 @@ def load_graphgallery_data(dataset):
             node_data["labels"] = graph.node_label[node_id].astype(np.long) - 1
         else:
             node_data["labels"] = graph.node_label[node_id].astype(np.long)
+        node_data["_ID"] = graph.node_attr[node_id].astype(np.float32)
 
-    dgl_graph = dgl.from_networkx(nx_g, node_attrs=['features', 'labels'])
+    dgl_graph = dgl.from_networkx(nx_g, node_attrs=['features', 'labels','_ID'])
     dgl_graph = dgl.add_self_loop(dgl_graph)
     return dgl_graph, len(np.unique(graph.node_label))
 
