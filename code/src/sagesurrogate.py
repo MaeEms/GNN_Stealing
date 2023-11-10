@@ -146,7 +146,8 @@ def evaluate_sage_surrogate(model, clf, g, inputs, labels, val_nid, batch_size, 
 
     model.train()
     clf.train()
-    return compute_acc(logists, labels), logists, embs
+    _acc, class_acc = compute_acc(logists, labels)
+    return _acc, logists, embs,class_acc
 
 
 def run_sage_surrogate(args, device, data, model_filename):
@@ -224,7 +225,7 @@ def run_sage_surrogate(args, device, data, model_filename):
 
             iter_tput.append(len(seeds) / (time.time() - tic_step))
             if step % args.log_every == 0:
-                acc = compute_acc(logists, batch_labels)
+                acc, class_acc = compute_acc(logists, batch_labels)
                 gpu_mem_alloc = th.cuda.max_memory_allocated(
                 ) / 1000000 if th.cuda.is_available() else 0
                 print('Epoch {:05d} | Step {:05d} | Loss {:.4f} | Train Acc {:.4f} | Speed (samples/sec) {:.4f} | GPU {:.1f} MB'.format(
@@ -236,19 +237,19 @@ def run_sage_surrogate(args, device, data, model_filename):
         if epoch >= 5:
             avg += toc - tic
         if epoch % args.eval_every == 0 and epoch != 0:
-            eval_acc, eval_preds, eval_embs = evaluate_sage_surrogate(
+            eval_acc, eval_preds, eval_embs,class_acc = evaluate_sage_surrogate(
                 model_surrogate, clf, val_g, val_g.ndata['features'], val_g.ndata['labels'], val_nid, args.batch_size, device)
             print('Eval Acc {:.4f}'.format(eval_acc))
 #             if eval_acc > best_val_score:
 #                 print("save best surrogate model to {}".format(model_filename))
 #                 torch.save(model_surrogate, model_filename)
 #                 best_val_score = eval_acc
-            test_acc, test_preds, test_embs = evaluate_sage_surrogate(
+            test_acc, test_preds, test_embs,class_acc = evaluate_sage_surrogate(
                 model_surrogate, clf, test_g, test_g.ndata['features'], test_g.ndata['labels'], test_nid, args.batch_size, device)
             print('Test Acc: {:.4f}'.format(test_acc))
 
     print('Avg epoch time: {}'.format(avg / (epoch - 4)))
-    eval_acc, eval_preds, eval_embs = evaluate_sage_surrogate(
+    eval_acc, eval_preds, eval_embs,class_acc = evaluate_sage_surrogate(
         model_surrogate, clf, train_g, train_g.ndata['features'], train_g.ndata['labels'], train_nid, args.batch_size, device)
     detached_classifier = train_detached_classifier(train_g, eval_embs)
 

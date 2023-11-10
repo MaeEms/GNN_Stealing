@@ -1,5 +1,3 @@
-from dgl import load_graphs
-
 from src.utils import delete_dgl_graph_edge
 from src.gin import *
 from src.gat import *
@@ -52,7 +50,7 @@ argparser.add_argument('--inductive', action='store_true',
 argparser.add_argument('--head', type=int, default=4)
 argparser.add_argument('--wd', type=float, default=0)
 argparser.add_argument('--target-model', type=str, default='sage')
-argparser.add_argument('--target-model-dim', type=int, default=128)
+argparser.add_argument('--target-model-dim', type=int, default=256)
 argparser.add_argument('--surrogate-model', type=str, default='sage')
 argparser.add_argument('--num-hidden', type=int, default=256)
 argparser.add_argument('--recovery-from', type=str, default='embedding')
@@ -65,6 +63,7 @@ argparser.add_argument('--delete_edges', type=str, default='no')
 args, _ = argparser.parse_known_args()
 
 args.inductive = True
+
 
 surrogate_projection_accuracy = []
 surrogate_prediction_accuracy = []
@@ -82,15 +81,10 @@ if args.gpu >= 0:
 else:
     device = th.device('cpu')
 
-dataset_name = str(args.dataset)
-if dataset_name == 'elliptic':
-    graph_list, _ = load_graphs('datasets/elliptic_from_5_to_10.bin')
-    g = graph_list[0]
-    n_classes = 2
-else:
-    g, n_classes = load_graphgallery_data(args.dataset)
 
-# 从文件数据中加载训练好的模型
+g, n_classes = load_graphgallery_data(args.dataset)
+
+
 model_args = pickle.load(open('./target_model_' + args.target_model +
                          '_' + str(args.target_model_dim) + '/model_args', 'rb'))
 model_args = model_args.__dict__
@@ -149,7 +143,7 @@ print(train_g.number_of_nodes(), val_g.number_of_nodes(), test_g.number_of_nodes
 
 # query target model with G_QUERY
 if args.target_model == 'sage':
-    query_acc, query_preds, query_embs = evaluate_sage_target(target_model,
+    query_acc, query_preds, query_embs, class_acc = evaluate_sage_target(target_model,
                                                               G_QUERY,
                                                               G_QUERY.ndata['features'],
                                                               G_QUERY.ndata['labels'],
@@ -157,7 +151,7 @@ if args.target_model == 'sage':
                                                               args.batch_size,
                                                               device)
 elif args.target_model == 'gin':
-    query_acc, query_preds, query_embs = evaluate_gin_target(target_model,
+    query_acc, query_preds, query_embs,class_acc = evaluate_gin_target(target_model,
                                                              G_QUERY,
                                                              G_QUERY.ndata['features'],
                                                              G_QUERY.ndata['labels'],
@@ -165,7 +159,7 @@ elif args.target_model == 'gin':
                                                              args.batch_size,
                                                              device)
 elif args.target_model == 'gat':
-    query_acc, query_preds, query_embs = evaluate_gat_target(target_model,
+    query_acc, query_preds, query_embs,class_acc = evaluate_gat_target(target_model,
                                                              G_QUERY,
                                                              G_QUERY.ndata['features'],
                                                              G_QUERY.ndata['labels'],
@@ -211,12 +205,22 @@ else:
     print("wrong recovery-from value")
     sys.exit()
 
+# 保存代理模型
+# print(args)
+# exit()
+SAVE_PATH = './surrogate_%s_%s_target_%s_%s/' % (args.surrogate_model, args.num_hidden, args.target_model, args.target_model_dim)
+SAVE_NAME = 'surrogate_model_%s_%s' % (args.surrogate_model, args.dataset)
+os.makedirs(SAVE_PATH, exist_ok=True)
+
 # which surrogate model to build
 if args.surrogate_model == 'gin':
     print('surrogate model: ', args.surrogate_model)
     model_s, classifier, detached_classifier = run_gin_surrogate(
         args, device, data, surrogate_model_filename)
-    acc_surrogate, preds_surrogate, embds_surrogate = evaluate_gin_surrogate(model_s,
+    th.save(model_s.state_dict(), SAVE_PATH + SAVE_NAME)
+    th.save(classifier, SAVE_PATH + 'classifier')
+    th.save(detached_classifier, SAVE_PATH + 'detached_classifier')
+    acc_surrogate, preds_surrogate, embds_surrogate,class_acc = evaluate_gin_surrogate(model_s,
                                                                              classifier,
                                                                              test_g, test_g.ndata['features'],
                                                                              test_g.ndata['labels'],
@@ -228,7 +232,10 @@ elif args.surrogate_model == 'gat':
     print('surrogate model: ', args.surrogate_model)
     model_s, classifier, detached_classifier = run_gat_surrogate(
         args, device, data, surrogate_model_filename)
-    acc_surrogate, preds_surrogate, embds_surrogate = evaluate_gat_surrogate(model_s,
+    th.save(model_s, SAVE_PATH + SAVE_NAME)
+    th.save(classifier, SAVE_PATH + 'classifier')
+    th.save(detached_classifier, SAVE_PATH + 'detached_classifier')
+    acc_surrogate, preds_surrogate, embds_surrogate,class_acc = evaluate_gat_surrogate(model_s,
                                                                              classifier,
                                                                              test_g,
                                                                              test_g.ndata['features'],
@@ -243,7 +250,10 @@ elif args.surrogate_model == 'sage':
     print('surrogate model: ', args.surrogate_model)
     model_s, classifier, detached_classifier = run_sage_surrogate(
         args, device, data, surrogate_model_filename)
-    acc_surrogate, preds_surrogate, embds_surrogate = evaluate_sage_surrogate(model_s,
+    th.save(model_s, SAVE_PATH + SAVE_NAME)
+    th.save(classifier, SAVE_PATH + 'classifier')
+    th.save(detached_classifier, SAVE_PATH + 'detached_classifier')
+    acc_surrogate, preds_surrogate, embds_surrogate,class_acc = evaluate_sage_surrogate(model_s,
                                                                               classifier,
                                                                               test_g,
                                                                               test_g.ndata['features'],
@@ -262,7 +272,7 @@ _predicts = detached_classifier.predict_proba(
 
 
 if args.target_model == 'sage':
-    test_acc, pred, embs = evaluate_sage_target(target_model,
+    test_acc, pred, embs, class_acc = evaluate_sage_target(target_model,
                                                 test_g,
                                                 test_g.ndata['features'],
                                                 test_g.ndata['labels'],
@@ -270,7 +280,7 @@ if args.target_model == 'sage':
                                                 args.batch_size,
                                                 device)
 elif args.target_model == 'gat':
-    test_acc, pred, embs = evaluate_gat_target(target_model,
+    test_acc, pred, embs,class_acc = evaluate_gat_target(target_model,
                                                test_g,
                                                test_g.ndata['features'],
                                                test_g.ndata['labels'],
@@ -280,7 +290,7 @@ elif args.target_model == 'gat':
                                                device)
 
 elif args.target_model == 'gin':
-    test_acc, pred, embs = evaluate_gin_target(target_model,
+    test_acc, pred, embs,class_acc = evaluate_gin_target(target_model,
                                                test_g,
                                                test_g.ndata['features'],
                                                test_g.ndata['labels'],
@@ -332,3 +342,7 @@ with open(_filename, 'a') as wf:
                                                   test_acc,
                                                   _acc,
                                                   _fidelity))
+
+# Save model args
+pickle.dump(args, open(SAVE_PATH + 'model_args', 'wb'))
+print("Finish")

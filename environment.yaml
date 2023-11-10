@@ -1,4 +1,4 @@
-name: gnn_model_stealing
+name: gnn_model_stealing_backend
 channels:
   - pytorch
   - dglteam
@@ -34,7 +34,7 @@ dependencies:
   - dbus=1.13.18=hb2f20db_0
   - decorator=5.1.1=pyhd3eb1b0_0
   - dgl-cuda11.3=0.7.2=py39_0
-  - expat=2.4.4=h295c915_2
+  - expat=2.4.4
   - ffmpeg=4.3=hf484d3e_0
   - fontconfig=2.13.1=h6c09931_0
   - fonttools=4.25.0=pyhd3eb1b0_0

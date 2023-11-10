@@ -1,5 +1,5 @@
 import dgl
-from scipy import sparse
+
 
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
@@ -13,22 +13,20 @@ from networkx.generators.community import planted_partition_graph
 from networkx.algorithms.community.asyn_fluid import asyn_fluidc
 
 import numpy as np
-from src.constants import *
+
 
 import os
 import sys
 import pickle as pkl
 import scipy.sparse as sp
-from core.model_handler import ModelHandler
+
 
 import networkx as nx
 from graphgallery.datasets import NPZDataset
 import random
-import scipy as sp
 
 from torch import nn
 import torch
-import numpy as np
 
 from networkx.generators.random_graphs import dense_gnm_random_graph
 
@@ -63,12 +61,10 @@ def load_graphgallery_data(dataset):
             node_data["labels"] = graph.node_label[node_id].astype(np.long) - 1
         else:
             node_data["labels"] = graph.node_label[node_id].astype(np.long)
-        node_data["_ID"] = graph.node_attr[node_id].astype(np.float32)
 
-    dgl_graph = dgl.from_networkx(nx_g, node_attrs=['features', 'labels','_ID'])
+    dgl_graph = dgl.from_networkx(nx_g, node_attrs=['features', 'labels'])
     dgl_graph = dgl.add_self_loop(dgl_graph)
     return dgl_graph, len(np.unique(graph.node_label))
-
 
 # def load_data(dataset_name):
 #     """
@@ -107,7 +103,7 @@ def load_graphgallery_data(dataset):
 #         return g, len(np.unique(g.ndata['labels']))
 #     return g, data.num_classes
 
-# 没有被使用
+
 def get_dataset_feature_label(dataset_name):
     """
     generate feature and label for each dataset
@@ -154,8 +150,22 @@ def compute_acc(pred, labels):
     """
     Compute the accuracy of prediction given the labels.
     """
+    # tag
     labels = labels.long()
-    return (th.argmax(pred, dim=1) == labels).float().sum() / len(pred)
+    
+    class_acc = {}
+    # 最多能够处理十分类问题
+    class_label_num = [0]*10
+    pred_label_num = [0]*10
+    pred_labels = torch.argmax(pred, dim=1).tolist()
+    for i in range(len(labels)):
+        class_label_num[labels[i]] += 1
+        if pred_labels[i] == labels[i]:
+            pred_label_num[labels[i]] +=1
+    for i in range(10):
+        if class_label_num[i] != 0:
+            class_acc[i] = pred_label_num[i]/class_label_num[i]
+    return (th.argmax(pred, dim=1) == labels).float().sum() / len(pred), class_acc
 
 
 def inductive_split(g):
@@ -168,6 +178,7 @@ def inductive_split(g):
 
 
 def projection(X, y, transform_name='TSNE', show_figure=True, gnn='Graphsage', dataset='Cora'):
+
     if transform_name == 'TSNE':
         transform = TSNE
         trans = transform(n_components=2, n_iter=3000, n_jobs=-1)
@@ -219,10 +230,10 @@ def projection(X, y, transform_name='TSNE', show_figure=True, gnn='Graphsage', d
 
 
 def generate_random_graph(n, m, num_classes, num_feats):
-    # g_query = dense_gnm_random_graph(n, m)
+    #g_query = dense_gnm_random_graph(n, m)
     g_query = erdos_renyi_graph(n, 0.01)
     node_features_query = np.random.choice(
-        [0, 1], size=(len(g_query), num_feats), p=[9.5 / 10, 0.5 / 10])
+        [0, 1], size=(len(g_query), num_feats), p=[9.5/10, 0.5/10])
 
     labels = list(range(0, num_classes))
     for node_id, node_data in g_query.nodes(data=True):
@@ -293,6 +304,7 @@ def load_planetoid(dataset, data_path, _log):
 
 
 def split_graph_into_communities(g, n_community):
+
     GCCs = sorted(nx.connected_components(g), key=len, reverse=True)
     g_GCC = g.subgraph(GCCs[0])
     communities = asyn_fluidc(g_GCC, n_community)
@@ -307,6 +319,7 @@ def split_graph_into_communities(g, n_community):
 
 
 def generate_DGL_graph(g, features, labels):
+
     mapping = dict([(nid, i) for i, nid in enumerate(g.nodes())])
 
     for node_id, node_data in g.nodes(data=True):
@@ -355,24 +368,16 @@ def split_graph_different_ratio(g, frac_list=[0.6, 0.2, 0.2], ratio=0.5):
         train_g.ndata['features'] = train_g.ndata['feat']
     if not 'labels' in train_g.ndata:
         train_g.ndata['labels'] = train_g.ndata['label']
-    if not '_ID' in train_g.ndata:
-        train_g.ndata['_ID'] = train_g.ndata['_ID']
 
     if not 'features' in val_g.ndata:
         val_g.ndata['features'] = val_g.ndata['feat']
     if not 'labels' in train_g.ndata:
         val_g.ndata['labels'] = val_g.ndata['label']
-    if not '_ID' in train_g.ndata:
-        val_g.ndata['_ID'] = val_g.ndata['_ID']    
 
     if not 'features' in test_g.ndata:
         test_g.ndata['features'] = test_g.ndata['feat']
     if not 'labels' in train_g.ndata:
         test_g.ndata['labels'] = test_g.ndata['label']
-    if not '_ID' in train_g.ndata:
-        test_g.ndata['_ID'] = test_g.ndata['_ID']    
-
-    print(train_g.number_of_nodes(), val_g.number_of_nodes(), test_g.number_of_nodes())
     return train_g, val_g, test_g
 
 
@@ -384,11 +389,11 @@ def delete_dgl_graph_edge(train_g):
     dgl_g = dgl.add_self_loop(dgl_g)
     dgl_g.ndata['features'] = train_g.ndata['features']
     dgl_g.ndata['labels'] = train_g.ndata['labels']
-    dgl_g.ndata['_ID'] = train_g.ndata['_ID']
     return dgl_g
 
 
 def train_detached_classifier(test_g, embds_surrogate):
+
     X, y = make_classification(n_samples=100, random_state=1)
 
     X = embds_surrogate.clone().detach().cpu().numpy()

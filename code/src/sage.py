@@ -27,12 +27,14 @@ import tqdm
 from dgl.nn.pytorch.conv import SAGEConv
 import torch
 
+
 import dgl
 import torch as th
 import networkx as nx
 import numpy as np
 import time
 from tqdm import tqdm
+
 
 from networkx.generators.random_graphs import dense_gnm_random_graph
 from networkx.generators.classic import barbell_graph
@@ -41,8 +43,8 @@ from networkx.generators.community import planted_partition_graph
 from networkx.algorithms.community.asyn_fluid import asyn_fluidc
 
 import torch as th
-
 th.manual_seed(0)
+
 
 """
 target model (graphsage)
@@ -87,7 +89,7 @@ class SAGE(nn.Module):
         return h, emb
 
     def inference(self, g, x, batch_size, device):
-        for l, layer in enumerate(self.layers[:len(self.layers) - 1]):
+        for l, layer in enumerate(self.layers[:len(self.layers)-1]):
 
             y = th.zeros(g.number_of_nodes(), self.n_hidden)
             embs = th.zeros(g.number_of_nodes(), self.n_hidden)
@@ -131,16 +133,12 @@ def evaluate_sage_target(model, g, inputs, labels, val_nid, batch_size, device):
     batch_size : Number of nodes to compute at the same time.
     device : The GPU device to evaluate on.
     """
-    # 将模型设置为评估模式
     model.eval()
-    # 禁用梯度计算，以减少内存的使用并加速模型的推断过程
-    # 通过将其包装在no_grad()上下文管理器中，可以确保在推断过程中不会计算梯度或者进行反向传播
     with th.no_grad():
-        # 预测结果pred和节点的表示向量embs
         pred, embs = model.inference(g, inputs, batch_size, device)
-    # 将模型设置为训练模式
     model.train()
-    return compute_acc(pred[val_nid], labels[val_nid]), pred, embs
+    _acc, class_acc = compute_acc(pred[val_nid], labels[val_nid])
+    return _acc, pred, embs, class_acc
 
 
 def run_sage_target(args, device, data):
@@ -189,7 +187,7 @@ def run_sage_target(args, device, data):
         tic_step = time.time()
         for step, (input_nodes, seeds, blocks) in enumerate(dataloader):
             # Load the input features as well as output labels
-            # batch_inputs, batch_labels = load_subtensor(train_g, seeds, input_nodes, device)
+            #batch_inputs, batch_labels = load_subtensor(train_g, seeds, input_nodes, device)
             blocks = [block.int().to(device) for block in blocks]
             batch_inputs = blocks[0].srcdata['features']
             batch_labels = blocks[-1].dstdata['labels']
@@ -204,22 +202,21 @@ def run_sage_target(args, device, data):
 
             iter_tput.append(len(seeds) / (time.time() - tic_step))
             if step % args.log_every == 0:
-                acc = compute_acc(batch_pred, batch_labels)
+                acc, class_acc = compute_acc(batch_pred, batch_labels)
                 gpu_mem_alloc = th.cuda.max_memory_allocated(
                 ) / 1000000 if th.cuda.is_available() else 0
-                print(
-                    'Epoch {:05d} | Step {:05d} | Loss {:.4f} | Train Acc {:.4f} | Speed (samples/sec) {:.4f} | GPU {:.1f} MB'.format(
-                        epoch, step, loss.item(), acc.item(), np.mean(iter_tput[3:]), gpu_mem_alloc))
+                print('Epoch {:05d} | Step {:05d} | Loss {:.4f} | Train Acc {:.4f} | Speed (samples/sec) {:.4f} | GPU {:.1f} MB'.format(
+                    epoch, step, loss.item(), acc.item(), np.mean(iter_tput[3:]), gpu_mem_alloc))
             tic_step = time.time()
 
         toc = time.time()
         print('Epoch Time(s): {:.4f}'.format(toc - tic))
         if epoch >= 5:
             avg += toc - tic
-        if (epoch + 1) % args.eval_every == 0 and epoch != 0:
-            eval_acc, pred, embs = evaluate_sage_target(
+        if epoch % args.eval_every == 0 and epoch != 0:
+            eval_acc, pred, embs, class_acc = evaluate_sage_target(
                 model, val_g, val_g.ndata['features'], val_g.ndata['labels'], val_nid, args.batch_size, device)
-            test_acc, pred, embs = evaluate_sage_target(
+            test_acc, pred, embs, class_acc = evaluate_sage_target(
                 model, test_g, test_g.ndata['features'], test_g.ndata['labels'], test_nid, args.batch_size, device)
             print('Eval Acc {:.4f}'.format(eval_acc))
             print('Test Acc: {:.4f}'.format(test_acc))
