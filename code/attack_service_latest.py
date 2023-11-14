@@ -20,6 +20,11 @@ from flask import Flask, url_for, jsonify, request
 from flask import Flask
 from flask_cors import CORS
 from datetime import datetime
+from graphgallery.data import Graph, EdgeGraph, MultiGraph, MultiEdgeGraph
+import subprocess
+import dgl
+import networkx as nx
+
 
 
 attack_service = Flask(__name__)
@@ -74,6 +79,8 @@ argparser.add_argument('--query_ratio', type=float, default=1.0,
 argparser.add_argument('--structure', type=str, default='original')
 argparser.add_argument('--delete_edges', type=str, default='no')
 argparser.add_argument('--user_id', type=str, default='user_01', help='user ID')
+argparser.add_argument('--target_model_api', type=str, help='target model url')
+argparser.add_argument('--dataset_path', type=str)
 
 
 args, _ = argparser.parse_known_args()
@@ -141,7 +148,7 @@ def get_query_graph_pred(url,g_query):
     # 将test_g序列化为字节流
     serialized_g_query = pickle.dumps(g_query)
     # 发送POST请求到目标模型的HTTP接口
-    url = 'http://10.176.22.10:6020/get_query_graph_pred'
+    # url = 'http://10.176.22.10:6020/get_query_graph_pred'
     headers = {'Content-Type': 'application/octet-stream'}
     response = requests.post(url, data=serialized_g_query, headers=headers)
     g_query_pred_array = response.json()['query_preds']
@@ -270,10 +277,11 @@ def main_process(self, params):
     
     
     self.update_state(state="PREPARE_DATAST",
-                        meta={'status': ' 正在准备查询图'})
+                        meta={'status': '正在准备查询图'})
 
     # 加载并划分数据集
-    g, n_classes = load_graphgallery_data(args.dataset)
+    # g, n_classes = load_graphgallery_data_from_local(args.dataset)
+    g, n_classes = load_graphgallery_data_from_local(args.dataset_path)
     train_g, val_g, test_g = split_graph_different_ratio(g, frac_list=[0.3, 0.2, 0.5], ratio=args.query_ratio)
 
     # 对 train_g 进行更新, 更新为攻击设置的场景（图结构完整，图结构不完整，图结构原本不完整但是idgl恢复）
@@ -283,9 +291,9 @@ def main_process(self, params):
         train_g = G_QUERY
 
     self.update_state(state="QUERY_TARGET",
-                        meta={'status': ' 正在查询目标模型'})
+                        meta={'status': '正在查询目标模型'})
     # 访问目标模型，获取目标模型对查询图的预测
-    query_preds = get_query_graph_pred('http://10.176.22.10:6020/get_query_graph_pred',G_QUERY)
+    query_preds = get_query_graph_pred(args.target_model_api,G_QUERY)
     torch.cuda.empty_cache()
     query_preds = query_preds.to(device)
 
@@ -297,7 +305,7 @@ def main_process(self, params):
     surrogate_model_filename = './surrogate_model'
 
     self.update_state(state="TRAIN_SURROGATE",
-                        meta={'status': ' 正在训练代理模型'})
+                        meta={'status': '正在训练代理模型'})
 
     # 默认目标模型返回的事preds的形式，构建data来进行训练
     data = train_g.ndata['features'].shape[1], query_preds.shape[1], train_g, val_g, test_g, query_preds
@@ -307,10 +315,10 @@ def main_process(self, params):
     _predicts = _predicts
 
     self.update_state(state="EVALUATE",
-                        meta={'status': ' 正在评估窃取效果'})
+                        meta={'status': '正在计算检测结果'})
 
     # 访问目标模型，获取目标模型对测试集的预测
-    target_preds = get_query_graph_pred('http://10.176.22.10:6020/get_query_graph_pred',test_g)
+    target_preds = get_query_graph_pred(args.target_model_api,test_g)
     target_preds = target_preds.to(device)
 
     test_g_label = test_g.ndata['labels'][test_g.nodes()]
@@ -349,8 +357,8 @@ def start_func():
     if args.user_id in user_task_count:
         count, last_time = user_task_count[args.user_id]
         if now_time - last_time < 1800:  # 时间窗口为30分钟
-            if count >= 1:       # 限制每个用户最多启动1个任务
-                return jsonify({'message': '您30分钟内请求的任务数量已达到上限：1条，请稍后再试.'}), 429
+            if count >= 3:       # 限制每个用户最多启动1个任务
+                return jsonify({'message': '您30分钟内请求的任务数量已达到上限：3条，请稍后再试.'}), 429
             else:
                 user_task_count[args.user_id] = (count + 1, now_time)
         else:
@@ -396,9 +404,10 @@ def query_process():
         # 后端执行任务出现了一些问题
         response = {
             'state': task.state,
-            'status': str(task.info),  # 报错的具体异常
+            'status': str(task.info)  # 报错的具体异常
         }
     return jsonify(response)
+
 
 @attack_service.route('/tasks', methods=['GET'])
 def list_tasks():
@@ -416,5 +425,68 @@ def list_tasks():
     return jsonify(all_tasks), 200
 
 
+@attack_service.route('/upload', methods=['POST'])
+def upload_model_file():
+    # 获取用户名
+    user_id = request.args.get('user_id')
+    # 获取上传的文件
+    uploaded_file = request.files['file']
+    # 获取上传文件名称
+    filename = uploaded_file.filename
+    # 获取上传文件扩展名
+    extension = os.path.splitext(filename)[1]
+    # 使用 git rev-parse 命令获取当前 Git 仓库的根目录路径
+    git_root = subprocess.check_output(['git', 'rev-parse', '--show-toplevel']).strip().decode('utf-8')
+    # 文件上传路径
+    upload_path = os.path.join(git_root, 'code/datasets/upload/' + user_id + "/") 
+    # 如果目录不存在则创建
+    if not os.path.exists(upload_path):
+        os.makedirs(upload_path, exist_ok=True)
+
+    # 检查是否存在同名文件，如果存在则进行覆盖
+    existing_file_path = os.path.join(upload_path, filename)
+    if os.path.exists(existing_file_path):
+        os.remove(existing_file_path)
+        uploaded_file.save(os.path.join(upload_path, filename)) 
+        return jsonify({'msg': '文件上传成功，存在同名文件，已覆盖',
+                        'dataset_path': os.path.join(upload_path, filename)})
+    
+    uploaded_file.save(os.path.join(upload_path, filename)) 
+    # 返回响应
+    return jsonify({'msg': '文件上传成功!',
+                    'dataset_path': os.path.join(upload_path, filename)})
+
+def load_npz(filepath):
+    filepath = os.path.abspath(os.path.expanduser(filepath))
+
+    if not filepath.endswith('.npz'):
+        filepath = filepath + '.npz'
+    if os.path.isfile(filepath):
+        with np.load(filepath, allow_pickle=True) as loader:
+            loader = dict(loader)
+            for k, v in loader.items():
+                if v.dtype.kind in {'O', 'U'}:
+                    loader[k] = v.tolist()
+            return loader
+    else:
+        raise ValueError(f"{filepath} doesn't exist.")
+
+
+def load_graphgallery_data_from_local(dataset_path):
+    loader = load_npz(dataset_path)
+    graph_cls = loader.pop("__class__", "Graph")
+    assert graph_cls in {"Graph", "MultiGraph", "EdgeGraph", "MultiEdgeGraph"}, graph_cls
+    graph = eval(graph_cls).from_npz(dataset_path)
+
+    nx_g = nx.from_scipy_sparse_matrix(graph.adj_matrix)
+
+    for node_id, node_data in nx_g.nodes(data=True):
+        node_data["features"] = graph.node_attr[node_id].astype(np.float32)
+        node_data["labels"] = graph.node_label[node_id].astype(np.long)
+
+    dgl_graph = dgl.from_networkx(nx_g, node_attrs=['features', 'labels'])
+    dgl_graph = dgl.add_self_loop(dgl_graph)
+    return dgl_graph, len(np.unique(graph.node_label))
+    
 if __name__ == '__main__':
     attack_service.run(host="0.0.0.0", port=6018)
