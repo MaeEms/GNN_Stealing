@@ -16,8 +16,7 @@ import numpy as np
 import requests
 from core.model_handler import ModelHandler
 from celery import Celery
-from flask import Flask, url_for, jsonify, request
-from flask import Flask
+from flask import Flask, url_for, jsonify, request, send_file
 from flask_cors import CORS
 from datetime import datetime
 from graphgallery.data import Graph, EdgeGraph, MultiGraph, MultiEdgeGraph
@@ -161,12 +160,17 @@ def get_query_graph_pred(url,g_query):
     处理:   先在训练集上执行训练, 再在测试集上执行测试
     输出:   代理模型在测试集上的准确率、预测preds、每类的准确率
 """
-def train_and_evaluate_surrogate_model(data, surrogate_model_filename, test_g):
+def train_and_evaluate_surrogate_model(data, surrogate_model_filename, test_g,task_id):
+    SAVE_PATH = './surrogate_models/'
+    SAVE_NAME = str(task_id)
+    os.makedirs(SAVE_PATH, exist_ok=True)
+    
     # which surrogate model to build
     if args.surrogate_model == 'gin':
         print('surrogate model: ', args.surrogate_model)
         model_s, classifier, detached_classifier = run_gin_surrogate(
             args, device, data, surrogate_model_filename)
+        th.save(model_s.state_dict(), SAVE_PATH + SAVE_NAME)
         acc_surrogate, preds_surrogate, embds_surrogate,class_acc = evaluate_gin_surrogate(model_s,
                                                                                 classifier,
                                                                                 test_g, test_g.ndata['features'],
@@ -177,6 +181,7 @@ def train_and_evaluate_surrogate_model(data, surrogate_model_filename, test_g):
         print('surrogate model: ', args.surrogate_model)
         model_s, classifier, detached_classifier = run_gat_surrogate(
             args, device, data, surrogate_model_filename)
+        th.save(model_s.state_dict(), SAVE_PATH + SAVE_NAME)
         acc_surrogate, preds_surrogate, embds_surrogate,class_acc = evaluate_gat_surrogate(model_s,
                                                                                 classifier,
                                                                                 test_g,
@@ -192,6 +197,7 @@ def train_and_evaluate_surrogate_model(data, surrogate_model_filename, test_g):
         print('surrogate model: ', args.surrogate_model)
         model_s, classifier, detached_classifier = run_sage_surrogate(
             args, device, data, surrogate_model_filename)
+        th.save(model_s.state_dict(), SAVE_PATH + SAVE_NAME)
         acc_surrogate, preds_surrogate, embds_surrogate,class_acc = evaluate_sage_surrogate(model_s,
                                                                                 classifier,
                                                                                 test_g,
@@ -269,6 +275,7 @@ def evaluate_fidelity_by_class(_predicts, pred, n_classes):
 
 @celery.task(bind=True, name='attack_service')
 def main_process(self, params):
+    task_id = self.request.id # 获取任务id
     # 过滤为空的参数
     params = {k: v for k, v in params.items() if v is not None}
     # 统一修改args
@@ -311,7 +318,7 @@ def main_process(self, params):
     data = train_g.ndata['features'].shape[1], query_preds.shape[1], train_g, val_g, test_g, query_preds
 
     # 获得了测试集上：代理模型的准确率、代理模型的预测、代理模型在各类节点上的准确率
-    _acc, _predicts,surrogate_class_acc = train_and_evaluate_surrogate_model(data, surrogate_model_filename, test_g)
+    _acc, _predicts,surrogate_class_acc = train_and_evaluate_surrogate_model(data, surrogate_model_filename, test_g, task_id)
     _predicts = _predicts
 
     self.update_state(state="EVALUATE",
@@ -455,6 +462,17 @@ def upload_model_file():
     # 返回响应
     return jsonify({'msg': '文件上传成功!',
                     'dataset_path': os.path.join(upload_path, filename)})
+
+
+@attack_service.route('/download', methods=['GET'])
+def download():
+    task_id = request.args.get('task_id')
+    file_path = './surrogate_models/' + str(task_id)
+    try:
+        return send_file(file_path, as_attachment=True)
+    except Exception as e:
+        return str(e)
+
 
 def load_npz(filepath):
     filepath = os.path.abspath(os.path.expanduser(filepath))

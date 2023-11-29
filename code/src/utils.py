@@ -154,15 +154,15 @@ def compute_acc(pred, labels):
     labels = labels.long()
     
     class_acc = {}
-    # 最多能够处理十分类问题
-    class_label_num = [0]*10
-    pred_label_num = [0]*10
+    # 最多能够处理200分类问题
+    class_label_num = [0]*200
+    pred_label_num = [0]*200
     pred_labels = torch.argmax(pred, dim=1).tolist()
     for i in range(len(labels)):
         class_label_num[labels[i]] += 1
         if pred_labels[i] == labels[i]:
             pred_label_num[labels[i]] +=1
-    for i in range(10):
+    for i in range(200):
         if class_label_num[i] != 0:
             class_acc[i] = pred_label_num[i]/class_label_num[i]
     return (th.argmax(pred, dim=1) == labels).float().sum() / len(pred), class_acc

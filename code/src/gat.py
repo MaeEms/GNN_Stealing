@@ -6,6 +6,7 @@ import torch.nn.functional as F
 import torch.optim as optim
 import dgl.nn.pytorch as dglnn
 import time
+import json
 
 
 from .utils import compute_acc
@@ -209,15 +210,17 @@ def run_gat_target(args, device, data):
         if epoch >= 5:
             avg += toc - tic
         if (epoch + 1) % args.eval_every == 0 and epoch != 0:
-            eval_acc, pred, embds,class_acc = evaluate_gat_target(
+            eval_acc, eval_pred, eval_embds,eval_class_acc = evaluate_gat_target(
                 model, val_g, val_g.ndata['features'], val_g.ndata['labels'], val_nid, args.val_batch_size, num_heads, device)
-            test_acc, pred, embds,class_acc = evaluate_gat_target(
+            test_acc, test_pred, test_embds,test_class_acc = evaluate_gat_target(
                 model, test_g, test_g.ndata['features'], test_g.ndata['labels'], test_nid, args.val_batch_size, num_heads, device)
 #             if args.save_pred:
 #                 np.savetxt(args.save_pred + '%02d' % epoch, pred.argmax(1).cpu().numpy(), '%d')
 
             print('Eval Acc {:.4f}'.format(eval_acc))
             print('Test Acc {:.4f}'.format(test_acc))
+            print("各个类别的预测准确率如下:")
+            print(json.dumps(test_class_acc))
 
 
     print('Avg epoch time: {}'.format(avg / (epoch - 4)))
