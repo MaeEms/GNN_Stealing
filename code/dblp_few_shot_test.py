@@ -173,8 +173,7 @@ g, n_classes = convert_dblp_dataset(adj, features, labels, degree, class_list_tr
 in_feats = g.ndata['features'].shape[1]
 labels = g.ndata['labels']
 
-train_g, val_g, test_g = split_graph(g, frac_list=[0.3, 0.2, 0.5])
-
+train_g, val_g, test_g = split_graph(g, frac_list=[0.7, 0.2, 0.1])
 
 # 计算训练集类别分布
 train_label_list = train_g.ndata['labels'].numpy().tolist()

@@ -13,7 +13,6 @@ import torch
 import numpy as np
 from core.model_handler import ModelHandler
 from flask import Flask, url_for, jsonify, request
-from flask import Flask
 from flask_cors import CORS
 
 target_model_app = Flask(__name__)

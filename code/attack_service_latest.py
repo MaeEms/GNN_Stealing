@@ -60,8 +60,8 @@ argparser.add_argument('--transform', type=str, default='TSNE')
 argparser.add_argument('--num-layers', type=int, default=2)
 argparser.add_argument('--fan-out', type=str, default='10,50')
 argparser.add_argument('--batch-size', type=int, default=400) # 之前是1000
-argparser.add_argument('--log-every', type=int, default=20)
-argparser.add_argument('--eval-every', type=int, default=50)
+argparser.add_argument('--log-every', type=int, default=20)  #20
+argparser.add_argument('--eval-every', type=int, default=50) #50
 argparser.add_argument('--lr', type=float, default=0.001)
 argparser.add_argument('--dropout', type=float, default=0.5)
 argparser.add_argument('--num-workers', type=int, default=4,
@@ -349,32 +349,30 @@ def main_process(self, params):
 
 
 
-# 用于记录每个用户最近一段时间内启动的任务数量的字典
-user_task_count = {}
-
-"""
-    发起检测任务, 获得任务id
-"""
-@attack_service.route('/execute', methods=['GET'])
-def start_func():
-    
+user_task_count = {} # 用于记录每个用户最近一段时间内启动的任务数量的字典
+user_task_last_time = {} # 用于记录每个用户最近一段时间内启动的任务时间的字典
+@app.route('/execute', methods=['POST'])
+def start_func():  
     params = request.get_json() # 获取用户上传的参数
-
-    now_time = time.time() # 获取当前时间
-    if args.user_id in user_task_count:
-        count, last_time = user_task_count[args.user_id]
-        if now_time - last_time < 1800:  # 时间窗口为30分钟
-            if count >= 3:       # 限制每个用户最多启动1个任务
-                return jsonify({'message': '您30分钟内请求的任务数量已达到上限：3条，请稍后再试.'}), 429
-            else:
-                user_task_count[args.user_id] = (count + 1, now_time)
-        else:
-            user_task_count[args.user_id] = (1, now_time)
-    else:
-        user_task_count[args.user_id] = (1, now_time)
+    user_id = params['user_id'] # 获取用户名
+    # 判断用户是否存在
+    if user_id not in user_task_count:
+        user_task_count[user_id] = 0
+    if user_id not in user_task_last_time:
+        user_task_last_time[user_id] = time.time()
+    # 判断用户是否在一段时间内启动了过多的任务
+    if user_task_count[user_id] >= 5 and time.time() - user_task_last_time[user_id] < 600:
+        return jsonify({'message': '当前用户任务过多，请稍后再试！'}), 400
+    # 判断用户是否在一段时间内启动了过多的任务
+    if time.time() - user_task_last_time[user_id] > 600:
+        user_task_count[user_id] = 0
+        user_task_last_time[user_id] = time.time()
+    # 更新用户任务数量
+    user_task_count[user_id] += 1
+    # 执行任务
     
     task = main_process.apply_async(kwargs={'params': params}) # 异步调用
-    return jsonify({'message': '新任务已加入.', 'task_id': task.id}), 202 
+    return jsonify({'message': '新任务已加入.', 'task_id': task.id}), 202  
 
 
 """
