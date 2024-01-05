@@ -24,10 +24,7 @@ import subprocess
 import dgl
 import networkx as nx
 
-
-
 attack_service = Flask(__name__)
-
 
 # 解决有关进程的异常
 torch.multiprocessing.set_start_method('spawn')
@@ -314,12 +311,11 @@ def main_process(self, params):
     self.update_state(state="TRAIN_SURROGATE",
                         meta={'status': '正在训练代理模型'})
 
-    # 默认目标模型返回的事preds的形式，构建data来进行训练
+    # 默认目标模型返回的是preds的形式，构建data来进行训练
     data = train_g.ndata['features'].shape[1], query_preds.shape[1], train_g, val_g, test_g, query_preds
 
     # 获得了测试集上：代理模型的准确率、代理模型的预测、代理模型在各类节点上的准确率
     _acc, _predicts,surrogate_class_acc = train_and_evaluate_surrogate_model(data, surrogate_model_filename, test_g, task_id)
-    _predicts = _predicts
 
     self.update_state(state="EVALUATE",
                         meta={'status': '正在计算检测结果'})
@@ -338,20 +334,29 @@ def main_process(self, params):
     # 计算每类别的保真率
     class_fidelity = evaluate_fidelity_by_class(_predicts, target_preds, n_classes)
 
+    # 展示100个节点的预测结果细节
+    target_preds = F.softmax(target_preds, dim=1).cpu().numpy().tolist()
+    indices = random.sample(range(len(target_preds)), 100)
+    target_preds_selected = [target_preds[i] for i in indices]
+    _predicts = _predicts.tolist()
+    _predicts_selected = [_predicts[i] for i in indices]
+    
     return {
         'target_model_acc': target_acc.item(),
         'target_model_acc_by_class':target_class_acc,
         'surrogate_model_acc': _acc,
         'surrogate_model_acc_by_class':surrogate_class_acc,
         'fidelity': _fidelity,
-        'fidelity_by_class':class_fidelity
+        'fidelity_by_class':class_fidelity,
+        'target_preds':target_preds_selected,
+        '_predicts':_predicts_selected
     }
 
 
 
 user_task_count = {} # 用于记录每个用户最近一段时间内启动的任务数量的字典
 user_task_last_time = {} # 用于记录每个用户最近一段时间内启动的任务时间的字典
-@app.route('/execute', methods=['POST'])
+@attack_service.route('/execute', methods=['POST'])
 def start_func():  
     params = request.get_json() # 获取用户上传的参数
     user_id = params['user_id'] # 获取用户名
@@ -402,7 +407,9 @@ def query_process():
                 'surrogate_model_acc': task.info.get('surrogate_model_acc', ''),
                 'surrogate_model_acc_by_class': task.info.get('surrogate_model_acc_by_class', ''),
                 'fidelity': task.info.get('fidelity', ''),
-                'fidelity_by_class': task.info.get('fidelity_by_class', '')
+                'fidelity_by_class': task.info.get('fidelity_by_class', ''),
+                'target_preds': task.info.get('target_preds', ''),
+                '_predicts': task.info.get('_predicts', ''),
             }
         }
     else:
