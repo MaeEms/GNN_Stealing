@@ -1,0 +1,684 @@
+
+>>> Train Epoch: [50 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 50]: 0h 00m 01s <> <>
+Training Epoch 50 -- Loss: 2.11955 | NLOSS = -2.11955 | ACC = 0.26667
+
+>>> Validation Epoch: [50 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 50]: 0h 00m 00s <> <>
+Validation Epoch 50 -- Loss: 1.88637 | NLOSS = -1.88637 | ACC = 0.16000
+
+>>> Train Epoch: [100 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 100]: 0h 00m 00s <> <>
+Training Epoch 100 -- Loss: 2.18650 | NLOSS = -2.18650 | ACC = 0.22667
+
+>>> Validation Epoch: [100 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 100]: 0h 00m 00s <> <>
+Validation Epoch 100 -- Loss: 1.88638 | NLOSS = -1.88638 | ACC = 0.16000
+
+>>> Train Epoch: [150 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 150]: 0h 00m 00s <> <>
+Training Epoch 150 -- Loss: 2.11575 | NLOSS = -2.11575 | ACC = 0.30667
+
+>>> Validation Epoch: [150 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 150]: 0h 00m 00s <> <>
+Validation Epoch 150 -- Loss: 1.88638 | NLOSS = -1.88638 | ACC = 0.16000
+
+>>> Train Epoch: [200 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 200]: 0h 00m 00s <> <>
+Training Epoch 200 -- Loss: 2.11690 | NLOSS = -2.11690 | ACC = 0.20000
+
+>>> Validation Epoch: [200 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 200]: 0h 00m 00s <> <>
+Validation Epoch 200 -- Loss: 1.88638 | NLOSS = -1.88638 | ACC = 0.16000
+
+>>> Train Epoch: [250 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 250]: 0h 00m 00s <> <>
+Training Epoch 250 -- Loss: 2.09180 | NLOSS = -2.09180 | ACC = 0.28000
+
+>>> Validation Epoch: [250 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 250]: 0h 00m 00s <> <>
+Validation Epoch 250 -- Loss: 1.88638 | NLOSS = -1.88638 | ACC = 0.16000
+
+>>> Train Epoch: [300 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 300]: 0h 00m 00s <> <>
+Training Epoch 300 -- Loss: 2.11339 | NLOSS = -2.11339 | ACC = 0.21333
+
+>>> Validation Epoch: [300 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 300]: 0h 00m 00s <> <>
+Validation Epoch 300 -- Loss: 1.88638 | NLOSS = -1.88638 | ACC = 0.16000
+
+>>> Train Epoch: [350 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 350]: 0h 00m 00s <> <>
+Training Epoch 350 -- Loss: 2.07477 | NLOSS = -2.07477 | ACC = 0.30667
+
+>>> Validation Epoch: [350 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 350]: 0h 00m 00s <> <>
+Validation Epoch 350 -- Loss: 1.88638 | NLOSS = -1.88638 | ACC = 0.16000
+
+>>> Train Epoch: [400 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 400]: 0h 00m 00s <> <>
+Training Epoch 400 -- Loss: 2.09828 | NLOSS = -2.09828 | ACC = 0.28000
+
+>>> Validation Epoch: [400 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 400]: 0h 00m 00s <> <>
+Validation Epoch 400 -- Loss: 1.88638 | NLOSS = -1.88638 | ACC = 0.16000
+Finished Training: ../out/cora/idgl_del_edges
+Training time: 6.35
+
+<<<<<<<<<<<<<<<< MODEL SUMMARY >>>>>>>>>>>>>>>> 
+Best epoch = 0; 
+NLOSS = -inf
+ACC = -inf
+
+ <<<<<<<<<<<<<<<< MODEL SUMMARY >>>>>>>>>>>>>>>> 
+[test] | test_exs = 26 | step: [1 / 1] | NLOSS = -1.85213 | ACC = 0.38462
+Finished Testing: ../out/cora/idgl_del_edges
+Testing time: 0.0
+
+>>> Train Epoch: [50 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 50]: 0h 00m 19s <> <>
+Training Epoch 50 -- Loss: 0.28317 | NLOSS = -0.28317 | ACC = 0.89677
+
+>>> Validation Epoch: [50 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 50]: 0h 00m 00s <> <>
+Validation Epoch 50 -- Loss: 0.33500 | NLOSS = -0.33500 | ACC = 0.89372
+
+>>> Train Epoch: [100 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 100]: 0h 00m 18s <> <>
+Training Epoch 100 -- Loss: 0.29126 | NLOSS = -0.29126 | ACC = 0.89032
+
+>>> Validation Epoch: [100 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 100]: 0h 00m 00s <> <>
+Validation Epoch 100 -- Loss: 0.33409 | NLOSS = -0.33409 | ACC = 0.89372
+
+>>> Train Epoch: [150 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 150]: 0h 00m 19s <> <>
+Training Epoch 150 -- Loss: 0.28276 | NLOSS = -0.28276 | ACC = 0.90000
+
+>>> Validation Epoch: [150 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 150]: 0h 00m 00s <> <>
+Validation Epoch 150 -- Loss: 0.33408 | NLOSS = -0.33408 | ACC = 0.89372
+
+>>> Train Epoch: [200 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 200]: 0h 00m 19s <> <>
+Training Epoch 200 -- Loss: 0.28452 | NLOSS = -0.28452 | ACC = 0.89677
+
+>>> Validation Epoch: [200 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 200]: 0h 00m 00s <> <>
+Validation Epoch 200 -- Loss: 0.33407 | NLOSS = -0.33407 | ACC = 0.89372
+
+>>> Train Epoch: [250 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 250]: 0h 00m 19s <> <>
+Training Epoch 250 -- Loss: 0.29019 | NLOSS = -0.29019 | ACC = 0.88548
+
+>>> Validation Epoch: [250 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 250]: 0h 00m 00s <> <>
+Validation Epoch 250 -- Loss: 0.33406 | NLOSS = -0.33406 | ACC = 0.89372
+
+>>> Train Epoch: [300 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 300]: 0h 00m 19s <> <>
+Training Epoch 300 -- Loss: 0.27839 | NLOSS = -0.27839 | ACC = 0.89516
+
+>>> Validation Epoch: [300 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 300]: 0h 00m 00s <> <>
+Validation Epoch 300 -- Loss: 0.33404 | NLOSS = -0.33404 | ACC = 0.89372
+
+>>> Train Epoch: [350 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 350]: 0h 00m 19s <> <>
+Training Epoch 350 -- Loss: 0.29635 | NLOSS = -0.29635 | ACC = 0.89355
+
+>>> Validation Epoch: [350 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 350]: 0h 00m 00s <> <>
+Validation Epoch 350 -- Loss: 0.33403 | NLOSS = -0.33403 | ACC = 0.89372
+
+>>> Train Epoch: [400 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 400]: 0h 00m 19s <> <>
+Training Epoch 400 -- Loss: 0.28712 | NLOSS = -0.28712 | ACC = 0.90000
+
+>>> Validation Epoch: [400 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 400]: 0h 00m 00s <> <>
+Validation Epoch 400 -- Loss: 0.33401 | NLOSS = -0.33401 | ACC = 0.89372
+Finished Training: ../out/cora/idgl_del_edges
+Training time: 153.67
+
+<<<<<<<<<<<<<<<< MODEL SUMMARY >>>>>>>>>>>>>>>> 
+Best epoch = 0; 
+NLOSS = -inf
+ACC = -inf
+
+ <<<<<<<<<<<<<<<< MODEL SUMMARY >>>>>>>>>>>>>>>> 
+[test] | test_exs = 207 | step: [1 / 1] | NLOSS = -0.41033 | ACC = 0.86473
+Finished Testing: ../out/cora/idgl_del_edges
+Testing time: 0.12
+
+>>> Train Epoch: [50 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 50]: 0h 00m 01s <> <>
+Training Epoch 50 -- Loss: 1.05445 | NLOSS = -1.05445 | ACC = 0.38889
+
+>>> Validation Epoch: [50 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 50]: 0h 00m 00s <> <>
+Validation Epoch 50 -- Loss: 1.14664 | NLOSS = -1.14664 | ACC = 0.38889
+
+>>> Train Epoch: [100 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 100]: 0h 00m 00s <> <>
+Training Epoch 100 -- Loss: 1.09597 | NLOSS = -1.09597 | ACC = 0.25926
+
+>>> Validation Epoch: [100 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 100]: 0h 00m 00s <> <>
+Validation Epoch 100 -- Loss: 1.14664 | NLOSS = -1.14664 | ACC = 0.38889
+
+>>> Train Epoch: [150 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 150]: 0h 00m 00s <> <>
+Training Epoch 150 -- Loss: 1.06811 | NLOSS = -1.06811 | ACC = 0.42593
+
+>>> Validation Epoch: [150 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 150]: 0h 00m 00s <> <>
+Validation Epoch 150 -- Loss: 1.14663 | NLOSS = -1.14663 | ACC = 0.38889
+
+>>> Train Epoch: [200 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 200]: 0h 00m 00s <> <>
+Training Epoch 200 -- Loss: 1.06622 | NLOSS = -1.06622 | ACC = 0.38889
+
+>>> Validation Epoch: [200 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 200]: 0h 00m 00s <> <>
+Validation Epoch 200 -- Loss: 1.14664 | NLOSS = -1.14664 | ACC = 0.38889
+
+>>> Train Epoch: [250 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 250]: 0h 00m 00s <> <>
+Training Epoch 250 -- Loss: 1.05497 | NLOSS = -1.05497 | ACC = 0.55556
+
+>>> Validation Epoch: [250 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 250]: 0h 00m 00s <> <>
+Validation Epoch 250 -- Loss: 1.14664 | NLOSS = -1.14664 | ACC = 0.38889
+
+>>> Train Epoch: [300 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 300]: 0h 00m 00s <> <>
+Training Epoch 300 -- Loss: 1.05661 | NLOSS = -1.05661 | ACC = 0.42593
+
+>>> Validation Epoch: [300 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 300]: 0h 00m 00s <> <>
+Validation Epoch 300 -- Loss: 1.14661 | NLOSS = -1.14661 | ACC = 0.38889
+
+>>> Train Epoch: [350 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 350]: 0h 00m 00s <> <>
+Training Epoch 350 -- Loss: 1.06346 | NLOSS = -1.06346 | ACC = 0.38889
+
+>>> Validation Epoch: [350 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 350]: 0h 00m 00s <> <>
+Validation Epoch 350 -- Loss: 1.14661 | NLOSS = -1.14661 | ACC = 0.38889
+
+>>> Train Epoch: [400 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 400]: 0h 00m 00s <> <>
+Training Epoch 400 -- Loss: 1.07667 | NLOSS = -1.07667 | ACC = 0.33333
+
+>>> Validation Epoch: [400 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 400]: 0h 00m 00s <> <>
+Validation Epoch 400 -- Loss: 1.14662 | NLOSS = -1.14662 | ACC = 0.38889
+Finished Training: ../out/cora/idgl_del_edges
+Training time: 6.48
+
+<<<<<<<<<<<<<<<< MODEL SUMMARY >>>>>>>>>>>>>>>> 
+Best epoch = 0; 
+NLOSS = -inf
+ACC = -inf
+
+ <<<<<<<<<<<<<<<< MODEL SUMMARY >>>>>>>>>>>>>>>> 
+[test] | test_exs = 18 | step: [1 / 1] | NLOSS = -1.11197 | ACC = 0.38889
+Finished Testing: ../out/cora/idgl_del_edges
+Testing time: 0.0
+
+>>> Train Epoch: [50 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 50]: 0h 00m 01s <> <>
+Training Epoch 50 -- Loss: 2.08013 | NLOSS = -2.08013 | ACC = 0.20000
+
+>>> Validation Epoch: [50 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 50]: 0h 00m 00s <> <>
+Validation Epoch 50 -- Loss: 1.91789 | NLOSS = -1.91789 | ACC = 0.04000
+
+>>> Train Epoch: [100 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 100]: 0h 00m 00s <> <>
+Training Epoch 100 -- Loss: 2.05410 | NLOSS = -2.05410 | ACC = 0.20000
+
+>>> Validation Epoch: [100 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 100]: 0h 00m 00s <> <>
+Validation Epoch 100 -- Loss: 1.91789 | NLOSS = -1.91789 | ACC = 0.04000
+
+>>> Train Epoch: [150 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 150]: 0h 00m 00s <> <>
+Training Epoch 150 -- Loss: 2.10375 | NLOSS = -2.10375 | ACC = 0.20000
+
+>>> Validation Epoch: [150 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 150]: 0h 00m 00s <> <>
+Validation Epoch 150 -- Loss: 1.91790 | NLOSS = -1.91790 | ACC = 0.04000
+
+>>> Train Epoch: [200 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 200]: 0h 00m 00s <> <>
+Training Epoch 200 -- Loss: 2.05991 | NLOSS = -2.05991 | ACC = 0.20000
+
+>>> Validation Epoch: [200 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 200]: 0h 00m 00s <> <>
+Validation Epoch 200 -- Loss: 1.91790 | NLOSS = -1.91790 | ACC = 0.04000
+
+>>> Train Epoch: [250 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 250]: 0h 00m 00s <> <>
+Training Epoch 250 -- Loss: 2.12657 | NLOSS = -2.12657 | ACC = 0.20000
+
+>>> Validation Epoch: [250 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 250]: 0h 00m 00s <> <>
+Validation Epoch 250 -- Loss: 1.91790 | NLOSS = -1.91790 | ACC = 0.04000
+
+>>> Train Epoch: [300 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 300]: 0h 00m 00s <> <>
+Training Epoch 300 -- Loss: 2.10017 | NLOSS = -2.10017 | ACC = 0.20000
+
+>>> Validation Epoch: [300 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 300]: 0h 00m 00s <> <>
+Validation Epoch 300 -- Loss: 1.91790 | NLOSS = -1.91790 | ACC = 0.04000
+
+>>> Train Epoch: [350 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 350]: 0h 00m 00s <> <>
+Training Epoch 350 -- Loss: 2.12469 | NLOSS = -2.12469 | ACC = 0.20000
+
+>>> Validation Epoch: [350 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 350]: 0h 00m 00s <> <>
+Validation Epoch 350 -- Loss: 1.91791 | NLOSS = -1.91791 | ACC = 0.04000
+
+>>> Train Epoch: [400 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 400]: 0h 00m 00s <> <>
+Training Epoch 400 -- Loss: 2.12407 | NLOSS = -2.12407 | ACC = 0.20000
+
+>>> Validation Epoch: [400 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 400]: 0h 00m 00s <> <>
+Validation Epoch 400 -- Loss: 1.91791 | NLOSS = -1.91791 | ACC = 0.04000
+Finished Training: ../out/cora/idgl_del_edges
+Training time: 6.1
+
+<<<<<<<<<<<<<<<< MODEL SUMMARY >>>>>>>>>>>>>>>> 
+Best epoch = 0; 
+NLOSS = -inf
+ACC = -inf
+
+ <<<<<<<<<<<<<<<< MODEL SUMMARY >>>>>>>>>>>>>>>> 
+[test] | test_exs = 26 | step: [1 / 1] | NLOSS = -1.88999 | ACC = 0.11538
+Finished Testing: ../out/cora/idgl_del_edges
+Testing time: 0.0
+
+>>> Train Epoch: [50 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 50]: 0h 00m 19s <> <>
+Training Epoch 50 -- Loss: 0.31875 | NLOSS = -0.31875 | ACC = 0.87581
+
+>>> Validation Epoch: [50 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 50]: 0h 00m 00s <> <>
+Validation Epoch 50 -- Loss: 0.28278 | NLOSS = -0.28278 | ACC = 0.91787
+
+>>> Train Epoch: [100 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 100]: 0h 00m 18s <> <>
+Training Epoch 100 -- Loss: 0.31749 | NLOSS = -0.31749 | ACC = 0.87742
+
+>>> Validation Epoch: [100 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 100]: 0h 00m 00s <> <>
+Validation Epoch 100 -- Loss: 0.28246 | NLOSS = -0.28246 | ACC = 0.91787
+
+>>> Train Epoch: [150 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 150]: 0h 00m 19s <> <>
+Training Epoch 150 -- Loss: 0.32180 | NLOSS = -0.32180 | ACC = 0.87903
+
+>>> Validation Epoch: [150 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 150]: 0h 00m 00s <> <>
+Validation Epoch 150 -- Loss: 0.28245 | NLOSS = -0.28245 | ACC = 0.91787
+
+>>> Train Epoch: [200 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 200]: 0h 00m 19s <> <>
+Training Epoch 200 -- Loss: 0.31470 | NLOSS = -0.31470 | ACC = 0.88548
+
+>>> Validation Epoch: [200 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 200]: 0h 00m 00s <> <>
+Validation Epoch 200 -- Loss: 0.28244 | NLOSS = -0.28244 | ACC = 0.91787
+
+>>> Train Epoch: [250 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 250]: 0h 00m 19s <> <>
+Training Epoch 250 -- Loss: 0.31772 | NLOSS = -0.31772 | ACC = 0.88387
+
+>>> Validation Epoch: [250 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 250]: 0h 00m 00s <> <>
+Validation Epoch 250 -- Loss: 0.28243 | NLOSS = -0.28243 | ACC = 0.91787
+
+>>> Train Epoch: [300 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 300]: 0h 00m 19s <> <>
+Training Epoch 300 -- Loss: 0.32012 | NLOSS = -0.32012 | ACC = 0.89032
+
+>>> Validation Epoch: [300 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 300]: 0h 00m 00s <> <>
+Validation Epoch 300 -- Loss: 0.28242 | NLOSS = -0.28242 | ACC = 0.91787
+
+>>> Train Epoch: [350 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 350]: 0h 00m 19s <> <>
+Training Epoch 350 -- Loss: 0.32340 | NLOSS = -0.32340 | ACC = 0.87742
+
+>>> Validation Epoch: [350 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 350]: 0h 00m 00s <> <>
+Validation Epoch 350 -- Loss: 0.28241 | NLOSS = -0.28241 | ACC = 0.91787
+
+>>> Train Epoch: [400 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 400]: 0h 00m 19s <> <>
+Training Epoch 400 -- Loss: 0.32315 | NLOSS = -0.32315 | ACC = 0.87258
+
+>>> Validation Epoch: [400 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 400]: 0h 00m 00s <> <>
+Validation Epoch 400 -- Loss: 0.28241 | NLOSS = -0.28241 | ACC = 0.91787
+Finished Training: ../out/cora/idgl_del_edges
+Training time: 154.15
+
+<<<<<<<<<<<<<<<< MODEL SUMMARY >>>>>>>>>>>>>>>> 
+Best epoch = 0; 
+NLOSS = -inf
+ACC = -inf
+
+ <<<<<<<<<<<<<<<< MODEL SUMMARY >>>>>>>>>>>>>>>> 
+[test] | test_exs = 207 | step: [1 / 1] | NLOSS = -0.43575 | ACC = 0.87923
+Finished Testing: ../out/cora/idgl_del_edges
+Testing time: 0.12
+
+>>> Train Epoch: [50 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 50]: 0h 00m 01s <> <>
+Training Epoch 50 -- Loss: 1.06988 | NLOSS = -1.06988 | ACC = 0.38889
+
+>>> Validation Epoch: [50 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 50]: 0h 00m 00s <> <>
+Validation Epoch 50 -- Loss: 1.09713 | NLOSS = -1.09713 | ACC = 0.33333
+
+>>> Train Epoch: [100 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 100]: 0h 00m 00s <> <>
+Training Epoch 100 -- Loss: 1.06535 | NLOSS = -1.06535 | ACC = 0.44444
+
+>>> Validation Epoch: [100 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 100]: 0h 00m 00s <> <>
+Validation Epoch 100 -- Loss: 1.09706 | NLOSS = -1.09706 | ACC = 0.33333
+
+>>> Train Epoch: [150 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 150]: 0h 00m 00s <> <>
+Training Epoch 150 -- Loss: 1.06913 | NLOSS = -1.06913 | ACC = 0.37037
+
+>>> Validation Epoch: [150 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 150]: 0h 00m 00s <> <>
+Validation Epoch 150 -- Loss: 1.09702 | NLOSS = -1.09702 | ACC = 0.33333
+
+>>> Train Epoch: [200 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 200]: 0h 00m 00s <> <>
+Training Epoch 200 -- Loss: 1.06059 | NLOSS = -1.06059 | ACC = 0.44444
+
+>>> Validation Epoch: [200 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 200]: 0h 00m 00s <> <>
+Validation Epoch 200 -- Loss: 1.09697 | NLOSS = -1.09697 | ACC = 0.33333
+
+>>> Train Epoch: [250 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 250]: 0h 00m 00s <> <>
+Training Epoch 250 -- Loss: 1.08240 | NLOSS = -1.08240 | ACC = 0.37037
+
+>>> Validation Epoch: [250 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 250]: 0h 00m 00s <> <>
+Validation Epoch 250 -- Loss: 1.09692 | NLOSS = -1.09692 | ACC = 0.33333
+
+>>> Train Epoch: [300 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 300]: 0h 00m 00s <> <>
+Training Epoch 300 -- Loss: 1.06962 | NLOSS = -1.06962 | ACC = 0.37037
+
+>>> Validation Epoch: [300 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 300]: 0h 00m 00s <> <>
+Validation Epoch 300 -- Loss: 1.09688 | NLOSS = -1.09688 | ACC = 0.33333
+
+>>> Train Epoch: [350 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 350]: 0h 00m 00s <> <>
+Training Epoch 350 -- Loss: 1.08868 | NLOSS = -1.08868 | ACC = 0.37037
+
+>>> Validation Epoch: [350 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 350]: 0h 00m 00s <> <>
+Validation Epoch 350 -- Loss: 1.09683 | NLOSS = -1.09683 | ACC = 0.33333
+
+>>> Train Epoch: [400 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 400]: 0h 00m 00s <> <>
+Training Epoch 400 -- Loss: 1.07164 | NLOSS = -1.07164 | ACC = 0.38889
+
+>>> Validation Epoch: [400 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 400]: 0h 00m 00s <> <>
+Validation Epoch 400 -- Loss: 1.09679 | NLOSS = -1.09679 | ACC = 0.33333
+Finished Training: ../out/cora/idgl_del_edges
+Training time: 6.51
+
+<<<<<<<<<<<<<<<< MODEL SUMMARY >>>>>>>>>>>>>>>> 
+Best epoch = 0; 
+NLOSS = -inf
+ACC = -inf
+
+ <<<<<<<<<<<<<<<< MODEL SUMMARY >>>>>>>>>>>>>>>> 
+[test] | test_exs = 18 | step: [1 / 1] | NLOSS = -1.15284 | ACC = 0.16667
+Finished Testing: ../out/cora/idgl_del_edges
+Testing time: 0.01
+
+>>> Train Epoch: [50 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 50]: 0h 00m 01s <> <>
+Training Epoch 50 -- Loss: 1.96162 | NLOSS = -1.96162 | ACC = 0.25333
+
+>>> Validation Epoch: [50 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 50]: 0h 00m 00s <> <>
+Validation Epoch 50 -- Loss: 1.71469 | NLOSS = -1.71469 | ACC = 0.24000
+
+>>> Train Epoch: [100 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 100]: 0h 00m 00s <> <>
+Training Epoch 100 -- Loss: 1.82676 | NLOSS = -1.82676 | ACC = 0.37333
+
+>>> Validation Epoch: [100 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 100]: 0h 00m 00s <> <>
+Validation Epoch 100 -- Loss: 1.71888 | NLOSS = -1.71888 | ACC = 0.24000
+
+>>> Train Epoch: [150 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 150]: 0h 00m 00s <> <>
+Training Epoch 150 -- Loss: 1.93287 | NLOSS = -1.93287 | ACC = 0.33333
+
+>>> Validation Epoch: [150 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 150]: 0h 00m 00s <> <>
+Validation Epoch 150 -- Loss: 1.71886 | NLOSS = -1.71886 | ACC = 0.24000
+
+>>> Train Epoch: [200 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 200]: 0h 00m 00s <> <>
+Training Epoch 200 -- Loss: 1.87551 | NLOSS = -1.87551 | ACC = 0.30667
+
+>>> Validation Epoch: [200 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 200]: 0h 00m 00s <> <>
+Validation Epoch 200 -- Loss: 1.71882 | NLOSS = -1.71882 | ACC = 0.24000
+
+>>> Train Epoch: [250 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 250]: 0h 00m 00s <> <>
+Training Epoch 250 -- Loss: 1.86602 | NLOSS = -1.86602 | ACC = 0.30667
+
+>>> Validation Epoch: [250 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 250]: 0h 00m 00s <> <>
+Validation Epoch 250 -- Loss: 1.71879 | NLOSS = -1.71879 | ACC = 0.24000
+
+>>> Train Epoch: [300 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 300]: 0h 00m 00s <> <>
+Training Epoch 300 -- Loss: 1.95401 | NLOSS = -1.95401 | ACC = 0.30667
+
+>>> Validation Epoch: [300 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 300]: 0h 00m 00s <> <>
+Validation Epoch 300 -- Loss: 1.71876 | NLOSS = -1.71876 | ACC = 0.24000
+
+>>> Train Epoch: [350 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 350]: 0h 00m 00s <> <>
+Training Epoch 350 -- Loss: 1.96958 | NLOSS = -1.96958 | ACC = 0.33333
+
+>>> Validation Epoch: [350 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 350]: 0h 00m 00s <> <>
+Validation Epoch 350 -- Loss: 1.71874 | NLOSS = -1.71874 | ACC = 0.24000
+
+>>> Train Epoch: [400 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 400]: 0h 00m 00s <> <>
+Training Epoch 400 -- Loss: 1.89679 | NLOSS = -1.89679 | ACC = 0.32000
+
+>>> Validation Epoch: [400 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 400]: 0h 00m 00s <> <>
+Validation Epoch 400 -- Loss: 1.71872 | NLOSS = -1.71872 | ACC = 0.24000
+Finished Training: ../out/cora/idgl_del_edges
+Training time: 6.08
+
+<<<<<<<<<<<<<<<< MODEL SUMMARY >>>>>>>>>>>>>>>> 
+Best epoch = 0; 
+NLOSS = -inf
+ACC = -inf
+
+ <<<<<<<<<<<<<<<< MODEL SUMMARY >>>>>>>>>>>>>>>> 
+[test] | test_exs = 26 | step: [1 / 1] | NLOSS = -1.63885 | ACC = 0.23077
+Finished Testing: ../out/cora/idgl_del_edges
+Testing time: 0.0
+
+>>> Train Epoch: [50 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 50]: 0h 00m 19s <> <>
+Training Epoch 50 -- Loss: 0.30984 | NLOSS = -0.30984 | ACC = 0.89032
+
+>>> Validation Epoch: [50 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 50]: 0h 00m 00s <> <>
+Validation Epoch 50 -- Loss: 0.32684 | NLOSS = -0.32684 | ACC = 0.86957
+
+>>> Train Epoch: [100 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 100]: 0h 00m 18s <> <>
+Training Epoch 100 -- Loss: 0.31802 | NLOSS = -0.31802 | ACC = 0.88710
+
+>>> Validation Epoch: [100 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 100]: 0h 00m 00s <> <>
+Validation Epoch 100 -- Loss: 0.32648 | NLOSS = -0.32648 | ACC = 0.86957
+
+>>> Train Epoch: [150 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 150]: 0h 00m 19s <> <>
+Training Epoch 150 -- Loss: 0.31587 | NLOSS = -0.31587 | ACC = 0.88710
+
+>>> Validation Epoch: [150 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 150]: 0h 00m 00s <> <>
+Validation Epoch 150 -- Loss: 0.32648 | NLOSS = -0.32648 | ACC = 0.86957
+
+>>> Train Epoch: [200 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 200]: 0h 00m 19s <> <>
+Training Epoch 200 -- Loss: 0.32369 | NLOSS = -0.32369 | ACC = 0.89194
+
+>>> Validation Epoch: [200 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 200]: 0h 00m 00s <> <>
+Validation Epoch 200 -- Loss: 0.32648 | NLOSS = -0.32648 | ACC = 0.86957
+
+>>> Train Epoch: [250 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 250]: 0h 00m 19s <> <>
+Training Epoch 250 -- Loss: 0.31651 | NLOSS = -0.31651 | ACC = 0.88871
+
+>>> Validation Epoch: [250 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 250]: 0h 00m 00s <> <>
+Validation Epoch 250 -- Loss: 0.32647 | NLOSS = -0.32647 | ACC = 0.86957
+
+>>> Train Epoch: [300 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 300]: 0h 00m 19s <> <>
+Training Epoch 300 -- Loss: 0.31751 | NLOSS = -0.31751 | ACC = 0.89355
+
+>>> Validation Epoch: [300 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 300]: 0h 00m 00s <> <>
+Validation Epoch 300 -- Loss: 0.32647 | NLOSS = -0.32647 | ACC = 0.86957
+
+>>> Train Epoch: [350 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 350]: 0h 00m 19s <> <>
+Training Epoch 350 -- Loss: 0.30911 | NLOSS = -0.30911 | ACC = 0.89032
+
+>>> Validation Epoch: [350 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 350]: 0h 00m 00s <> <>
+Validation Epoch 350 -- Loss: 0.32646 | NLOSS = -0.32646 | ACC = 0.86957
+
+>>> Train Epoch: [400 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 400]: 0h 00m 19s <> <>
+Training Epoch 400 -- Loss: 0.31443 | NLOSS = -0.31443 | ACC = 0.89839
+
+>>> Validation Epoch: [400 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 400]: 0h 00m 00s <> <>
+Validation Epoch 400 -- Loss: 0.32646 | NLOSS = -0.32646 | ACC = 0.86957
+Finished Training: ../out/cora/idgl_del_edges
+Training time: 154.21
+
+<<<<<<<<<<<<<<<< MODEL SUMMARY >>>>>>>>>>>>>>>> 
+Best epoch = 0; 
+NLOSS = -inf
+ACC = -inf
+
+ <<<<<<<<<<<<<<<< MODEL SUMMARY >>>>>>>>>>>>>>>> 
+[test] | test_exs = 207 | step: [1 / 1] | NLOSS = -0.28977 | ACC = 0.91787
+Finished Testing: ../out/cora/idgl_del_edges
+Testing time: 0.12
+
+>>> Train Epoch: [50 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 50]: 0h 00m 01s <> <>
+Training Epoch 50 -- Loss: 1.08110 | NLOSS = -1.08110 | ACC = 0.48148
+
+>>> Validation Epoch: [50 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 50]: 0h 00m 00s <> <>
+Validation Epoch 50 -- Loss: 1.13804 | NLOSS = -1.13804 | ACC = 0.33333
+
+>>> Train Epoch: [100 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 100]: 0h 00m 00s <> <>
+Training Epoch 100 -- Loss: 1.04647 | NLOSS = -1.04647 | ACC = 0.48148
+
+>>> Validation Epoch: [100 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 100]: 0h 00m 00s <> <>
+Validation Epoch 100 -- Loss: 1.13805 | NLOSS = -1.13805 | ACC = 0.33333
+
+>>> Train Epoch: [150 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 150]: 0h 00m 00s <> <>
+Training Epoch 150 -- Loss: 1.06553 | NLOSS = -1.06553 | ACC = 0.37037
+
+>>> Validation Epoch: [150 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 150]: 0h 00m 00s <> <>
+Validation Epoch 150 -- Loss: 1.13804 | NLOSS = -1.13804 | ACC = 0.33333
+
+>>> Train Epoch: [200 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 200]: 0h 00m 00s <> <>
+Training Epoch 200 -- Loss: 1.09072 | NLOSS = -1.09072 | ACC = 0.37037
+
+>>> Validation Epoch: [200 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 200]: 0h 00m 00s <> <>
+Validation Epoch 200 -- Loss: 1.13806 | NLOSS = -1.13806 | ACC = 0.33333
+
+>>> Train Epoch: [250 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 250]: 0h 00m 00s <> <>
+Training Epoch 250 -- Loss: 1.05168 | NLOSS = -1.05168 | ACC = 0.61111
+
+>>> Validation Epoch: [250 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 250]: 0h 00m 00s <> <>
+Validation Epoch 250 -- Loss: 1.13808 | NLOSS = -1.13808 | ACC = 0.33333
+
+>>> Train Epoch: [300 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 300]: 0h 00m 00s <> <>
+Training Epoch 300 -- Loss: 1.08012 | NLOSS = -1.08012 | ACC = 0.44444
+
+>>> Validation Epoch: [300 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 300]: 0h 00m 00s <> <>
+Validation Epoch 300 -- Loss: 1.13808 | NLOSS = -1.13808 | ACC = 0.33333
+
+>>> Train Epoch: [350 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 350]: 0h 00m 00s <> <>
+Training Epoch 350 -- Loss: 1.07828 | NLOSS = -1.07828 | ACC = 0.48148
+
+>>> Validation Epoch: [350 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 350]: 0h 00m 00s <> <>
+Validation Epoch 350 -- Loss: 1.13807 | NLOSS = -1.13807 | ACC = 0.33333
+
+>>> Train Epoch: [400 / 10000]
+<> <> Timer [Train] <> <> Interval [Training Epoch 400]: 0h 00m 00s <> <>
+Training Epoch 400 -- Loss: 1.04935 | NLOSS = -1.04935 | ACC = 0.53704
+
+>>> Validation Epoch: [400 / 10000]
+<> <> Timer [Train] <> <> Interval [Validation Epoch 400]: 0h 00m 00s <> <>
+Validation Epoch 400 -- Loss: 1.13808 | NLOSS = -1.13808 | ACC = 0.33333
+Finished Training: ../out/cora/idgl_del_edges
+Training time: 6.46
+
+<<<<<<<<<<<<<<<< MODEL SUMMARY >>>>>>>>>>>>>>>> 
+Best epoch = 0; 
+NLOSS = -inf
+ACC = -inf
+
+ <<<<<<<<<<<<<<<< MODEL SUMMARY >>>>>>>>>>>>>>>> 
+[test] | test_exs = 18 | step: [1 / 1] | NLOSS = -1.07047 | ACC = 0.50000
+Finished Testing: ../out/cora/idgl_del_edges
+Testing time: 0.0

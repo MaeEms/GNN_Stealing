@@ -377,7 +377,7 @@ def start_func():
     # 执行任务
     
     task = main_process.apply_async(kwargs={'params': params}) # 异步调用
-    return jsonify({'message': '新任务已加入.', 'task_id': task.id}), 202  
+    return jsonify({'message': '新任务已加入.', 'task_id': task.id}), 202 
 
 
 """

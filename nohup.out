@@ -1,0 +1,23 @@
+python: can't open file '/home/data/ycx/my_program/GNN_Stealing/target_model_service.py': [Errno 2] No such file or directory
+Usage: celery [OPTIONS] COMMAND [ARGS]...
+Try 'celery --help' for help.
+
+Error: Invalid value for '-A' / '--app': 
+Unable to load celery application.
+While trying to load the module attack_service_latest.celery the following error occurred:
+Traceback (most recent call last):
+  File "/home/yangchenxi/anaconda3/envs/gnn_model_stealing/lib/python3.9/site-packages/celery/bin/celery.py", line 58, in convert
+    return find_app(value)
+  File "/home/yangchenxi/anaconda3/envs/gnn_model_stealing/lib/python3.9/site-packages/celery/app/utils.py", line 383, in find_app
+    sym = symbol_by_name(app, imp=imp)
+  File "/home/yangchenxi/anaconda3/envs/gnn_model_stealing/lib/python3.9/site-packages/kombu/utils/imports.py", line 59, in symbol_by_name
+    module = imp(module_name, package=package, **kwargs)
+  File "/home/yangchenxi/anaconda3/envs/gnn_model_stealing/lib/python3.9/site-packages/celery/utils/imports.py", line 104, in import_from_cwd
+    return imp(module, package=package)
+  File "/home/yangchenxi/anaconda3/envs/gnn_model_stealing/lib/python3.9/importlib/__init__.py", line 127, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1030, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1007, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 984, in _find_and_load_unlocked
+ModuleNotFoundError: No module named 'attack_service_latest'
+
